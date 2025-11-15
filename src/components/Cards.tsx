@@ -1,88 +1,131 @@
-"use client";
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
+'use client'
+import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import {
+  Antenna,
+  ChartNoAxesCombined,
+  Crosshair,
+  SlidersHorizontal,
+  Sprout,
+  TrendingUp,
+  VolumeOff,
+} from 'lucide-react'
 
-export default function Cards() {
-  const cards = [
-    { icon: "📕",
-         title: "We don’t follow trends.", 
-         subtitle: "We design what prop trading should feel like" },
-    { icon: "📘",
-         title: "Trade with clarity.", 
-         subtitle: "Every rule exists to empower, not restrict." },
-    { icon: "📗",
-         title: "Every parameter makes sense.",
-          subtitle: "Transparent balanced and fair from day one." },
-    { icon: "📙",
-         title: "Grow without limits.",
-          subtitle: "The better you perform, the more we scale with you." },
-    { icon: "📔",
-         title: "You focus on the charts.",
-         subtitle: "We handle everything else from funding to payouts." },
-    { icon: "📓", 
-        title: "No distractions. No noise.",
-        subtitle: "Small edges create big results." }
+const Cart = () => {
+  const CartItems = [
+    {
+      id: 1,
+      title: 'We dont follow trends',
+      description: 'We design what prop tranding should feel like',
+      icon: <TrendingUp size={36} />,
+    },
+    {
+      id: 2,
+      title: 'Trade with clarity',
+      description: 'Every rule exists to empower, not restrict',
+      icon: <Antenna size={36} />,
+    },
+    {
+      id: 3,
+      title: 'Every parameter makes',
+      description: 'Transparent, balanced, and fair, from day one',
+      icon: <SlidersHorizontal size={36} />,
+    },
+    {
+      id: 4,
+      title: 'Grow without limits.',
+      description: 'The better perform, the more we scale with you',
+      icon: <Sprout size={36} />,
+    },
+    {
+      id: 5,
+      title: 'Your focus on the charts',
+      description: 'We handle everything else from funding to payouts',
+      icon: <ChartNoAxesCombined size={36} />,
+    },
+    {
+      id: 6,
+      title: 'No distractions, No noise',
+      description: 'Just pure performance',
+      icon: <VolumeOff size={36} />,
+    },
+    {
+      id: 7,
+      title: 'Precision. Control. Freedom',
+      description: 'Built for traders who demand more',
+      icon: <Crosshair size={36} />,
+    },
   ]
+  const [yOffset, setYOffset] = useState(0)
 
-  const scrollRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ["start end", "end start"],
-  });
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setYOffset((prev) => prev + 5) 
+    }, 50)
+    return () => clearInterval(interval)
+  }, [yOffset])
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 55 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: -i * 45,
+      transition: { duration: 0.8, ease: 'easeOut' },
+    }),
+  }
 
   return (
-    <div className="min-h-[200vh] bg-black p-10 flex flex-col items-center">
+    <div className='text-white p-4 sm:p-6 md:p-8 relative'>
+      <section className='flex flex-col items-center relative'>
+        {CartItems.map((item, index) => (
+          <motion.div
+            key={item.id}
+            animate={{ y: [-10, 10, -10] }} 
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            custom={index}
+            variants={itemVariants}
+            initial='hidden'
+            whileInView='visible'
+            viewport={{ once: true, amount: 0.3 }}
+            className={`
+              w-full
+              max-w-md 
+              sm:max-w-lg 
+              md:max-w-2xl 
+              lg:max-w-3xl 
+              xl:max-w-4xl
+              mt-8 p-6 
+              bg-gradient-to-tr from-black via-gray-900 to-amber-900/40
+              shadow-2xl 
+              border border-gray-700 
+              rounded-3xl 
+           
+              transition-all duration-300
+              relative
+            `}
+          >
+            {item.icon}
 
-     
-      <div className="sticky top-20 z-40 flex justify-center w-full">
-        <motion.div
-          className="w-[600px] h-[180px] rounded-2xl bg-gradient-to-tr from-black via-gray-900 to-amber-900/40 
-                     border border-[#1c1c1c] shadow-xl p-6 flex flex-col justify-between relative"
-        >
-          <div className="absolute right-0 top-0 w-[60%] h-full bg-gradient-to-br 
-                          from-[#c47a43]/70 to-transparent blur-[160px] opacity-90" />
-
-          <div className="w-12 h-12 rounded-xl bg-[#141414] border border-[#2a2a2a] 
-                          flex items-center justify-center text-red-500 text-2xl z-10">
-            {cards[0].icon}
-          </div>
-
-          <div className="flex flex-col z-10">
-            <h2 className="text-white text-2xl font-semibold">{cards[0].title}</h2>
-            <p className="text-gray-400 text-sm mt-1">{cards[0].subtitle}</p>
-          </div>
-        </motion.div>
-      </div>
-
-      <div ref={scrollRef} className="mt-20 space-y-20 w-full flex flex-col items-center">
-        {cards.slice(1).map((card, i) => {
-          const moveY = useTransform(scrollYProgress, [0, 1], [180 * (i + 1), -100]);
-
-          return (
-            <motion.div
-              key={i}
-              style={{ y: moveY }}
-              className="w-[600px] h-[180px] rounded-2xl bg-gradient-to-tr from-black via-gray-900 to-amber-900/40 
-                         border border-[#1c1c1c] shadow-xl p-6 flex flex-col justify-between relative 
-                         -mt-[150px] z-10"
-            >
-              <div className="absolute right-0 top-0 w-[60%] h-full bg-gradient-to-br 
-                              from-[#c47a43]/70 to-transparent blur-[160px] opacity-90" />
-
-              <div className="w-12 h-12 rounded-xl bg-[#141414] border border-[#2a2a2a] 
-                              flex items-center justify-center text-red-500 text-2xl z-10">
-                {card.icon}
-              </div>
-
-              <div className="flex flex-col z-10">
-                <h2 className="text-white text-2xl font-semibold">{card.title}</h2>
-                <p className="text-gray-400 text-sm mt-1">{card.subtitle}</p>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-
+            <div className='mt-4'>
+              <h1 className='text-3xl sm:text-3xl font-semibold mb-3'>
+                {item.title}
+              </h1>
+              <p className='text-gray-300 text-sm sm:text-base leading-relaxed'>
+                {item.description}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </section>
     </div>
   )
 }
+
+export default Cart
+
+
+
+
+
+
