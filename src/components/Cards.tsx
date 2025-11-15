@@ -76,7 +76,7 @@ const Cart = () => {
   }
 
   return (
-    <div className='text-white p-4 sm:p-6 md:p-8 relative'>
+    <div className='text-white bg-[#171d32] p-4 sm:p-6 md:p-8 relative'>
       <section className='flex flex-col items-center relative'>
         {CartItems.map((item, index) => (
           <motion.div
