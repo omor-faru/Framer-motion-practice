@@ -121,6 +121,7 @@
 
 'use client'
 import { motion } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import {
   Antenna,
@@ -187,7 +188,7 @@ const Cart = () => {
     return () => clearInterval(interval)
   }, [yOffset])
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 55 },
     visible: (i: number) => ({
       opacity: 1,
